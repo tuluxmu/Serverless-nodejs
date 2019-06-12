@@ -20,11 +20,17 @@ service: serverless-nodejs # NOTE: update this with your service name
 provider:
   name: aws
   runtime: nodejs8.10
+  tag: 
+    Name: $(self:service)
+    Environment: $(self:provider.stage)
+    Department: dev
+    Team: int-xmn
+    Owner: Lucy.Tu
 
 # you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
-
+  stage: dev
+  region: us-east-1
+  profile: okta-rnd-team_524621635179
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -93,8 +99,21 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
+resources:
+ Resources:
+  testTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: testTable
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
@@ -103,5 +122,21 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+custom:
+  dynamodb:
+  # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+    # Uncomment only if you already have a DynamoDB running locally
+    # noStart: true
 plugins:
   - serverless-offline
+  - serverless-dynamodb-local

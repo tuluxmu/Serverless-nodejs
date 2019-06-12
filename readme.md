@@ -32,6 +32,24 @@ serverless invoke local --function hello
 3. DynamoDB
   1. AWS Resources
   Anything that can be defined in CloudFormation is supported by the Serverless Framework
+   2. Launch DynamoDB Locally
+```
+var putParams = {
+    TableName: 'testTable',
+    Item: { 
+        userId: 'Lucy.Tu'
+    }
+};
+docClient.put(putParams, function(err, data) {
+    if (err) {
+         console.log('===err', err);
+    }
+    else {
+        console.log('successfully!');
+    }
+});
+
+```   
   
 4. The way of deployment
    1. Packaging service
