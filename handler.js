@@ -3,6 +3,10 @@ const AWS = require('aws-sdk');
 AWS.config.update({
   region: 'us-east-1'
 });
+// const dynamoDb = new AWS.DynamoDB.DocumentClient({
+//   region: 'localhost',
+//     endpoint: 'http://localhost:8000'
+// });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TableName = 'testTable';
 module.exports.hello = async (event) => {
@@ -16,7 +20,7 @@ module.exports.hello = async (event) => {
     return new Promise((resolve, reject) => {
       dynamoDb.put(params, (error) => {
         if (error) {
-          reject();
+          reject(error);
         } else {
           resolve();
         }

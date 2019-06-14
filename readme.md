@@ -29,6 +29,10 @@ serverless invoke local --function hello
          path: index
          method: get
 ```
+**How to lauch serverless locally**
+```
+serverless offline
+```
 3. DynamoDB
   1. AWS Resources
   Anything that can be defined in CloudFormation is supported by the Serverless Framework
@@ -49,7 +53,18 @@ docClient.put(putParams, function(err, data) {
     }
 });
 
-```   
+```  
+**How to Start and Remove Dynamodb Locally**
+```
+In CLI:
+Start: sls dynamodb start
+Remove: sls dynamodb remove
+In Your JS File:
+new AWS.DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:8000'
+})
+``` 
   
 4. The way of deployment
    1. Packaging service
