@@ -3,12 +3,16 @@ const AWS = require('aws-sdk');
 AWS.config.update({
   region: 'us-east-1'
 });
-// const dynamoDb = new AWS.DynamoDB.DocumentClient({
-//   region: 'localhost',
-//     endpoint: 'http://localhost:8000'
-// });
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
-const TableName = 'testTable';
+let dynamoDbConfig = null;
+if (process.env.STAGE) {
+  dynamoDbConfig = {
+    region: 'localhost',
+    endpoint: 'http://localhost:8000'
+  }
+}
+const dynamoDb = new AWS.DynamoDB.DocumentClient(dynamoDbConfig);
+const TableName = process.env.TABLE_NAME;
+
 module.exports.hello = async (event) => {
   const params = {
     TableName,
@@ -16,6 +20,7 @@ module.exports.hello = async (event) => {
       userId: 'Lucy.Tu'
     }
   };
+  console.log('=====TableName', process.env.TABLE_NAME, process.env.STAGE, dynamoDbConfig);
   async function putItem(params) {
     return new Promise((resolve, reject) => {
       dynamoDb.put(params, (error) => {
